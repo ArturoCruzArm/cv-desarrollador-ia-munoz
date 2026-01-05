@@ -798,6 +798,92 @@
             </div>
         </div>
 
+        <!-- NLP Demo Section -->
+        <div class="section" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 15px;">
+            <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">Demo de NLP en Vivo - IA en Acción</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 30px; opacity: 0.95;">
+                Prueben mi implementación de Procesamiento de Lenguaje Natural. Escriban cualquier texto y vean el análisis en tiempo real.
+            </p>
+
+            <div style="background: white; border-radius: 15px; padding: 30px; color: #333;">
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 10px; color: #1f2937;">
+                        Ingrese un texto para analizar:
+                    </label>
+                    <textarea
+                        id="nlpInput"
+                        style="width: 100%; min-height: 120px; padding: 15px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem; font-family: inherit; resize: vertical;"
+                        placeholder="Ejemplo: 'Estoy muy emocionado por esta oportunidad en MUÑOZ C Y ASOCIADOS. Me encantaría trabajar con ustedes desarrollando chatbots inteligentes.'"
+                    ></textarea>
+                </div>
+
+                <button
+                    onclick="analyzeText()"
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; margin-bottom: 25px; transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.02)'"
+                    onmouseout="this.style.transform='scale(1)'"
+                >
+                    🧠 Analizar con IA
+                </button>
+
+                <div id="nlpResults" style="display: none;">
+                    <!-- Análisis de Sentimientos -->
+                    <div style="background: #f3f4f6; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h3 style="color: #2563eb; margin-bottom: 15px; font-size: 1.2rem;">📊 Análisis de Sentimientos</h3>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 150px; background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.9rem; color: #6b7280; margin-bottom: 5px;">Sentimiento</div>
+                                <div id="sentimentLabel" style="font-size: 1.5rem; font-weight: bold;"></div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px; background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.9rem; color: #6b7280; margin-bottom: 5px;">Confianza</div>
+                                <div id="sentimentScore" style="font-size: 1.5rem; font-weight: bold; color: #10b981;"></div>
+                            </div>
+                            <div style="flex: 1; min-width: 150px; background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.9rem; color: #6b7280; margin-bottom: 5px;">Polaridad</div>
+                                <div id="sentimentPolarity" style="font-size: 1.5rem; font-weight: bold; color: #8b5cf6;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clasificación de Intención -->
+                    <div style="background: #f3f4f6; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h3 style="color: #2563eb; margin-bottom: 15px; font-size: 1.2rem;">🎯 Clasificación de Intención</h3>
+                        <div id="intentResults" style="background: white; padding: 15px; border-radius: 8px;"></div>
+                    </div>
+
+                    <!-- Palabras Clave -->
+                    <div style="background: #f3f4f6; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <h3 style="color: #2563eb; margin-bottom: 15px; font-size: 1.2rem;">🔑 Palabras Clave Extraídas</h3>
+                        <div id="keywordsResults" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                    </div>
+
+                    <!-- Estadísticas -->
+                    <div style="background: #f3f4f6; padding: 20px; border-radius: 10px;">
+                        <h3 style="color: #2563eb; margin-bottom: 15px; font-size: 1.2rem;">📈 Estadísticas del Texto</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px;">
+                            <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.85rem; color: #6b7280;">Palabras</div>
+                                <div id="wordCount" style="font-size: 1.3rem; font-weight: bold; color: #2563eb;"></div>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.85rem; color: #6b7280;">Caracteres</div>
+                                <div id="charCount" style="font-size: 1.3rem; font-weight: bold; color: #2563eb;"></div>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.85rem; color: #6b7280;">Oraciones</div>
+                                <div id="sentenceCount" style="font-size: 1.3rem; font-weight: bold; color: #2563eb;"></div>
+                            </div>
+                            <div style="background: white; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 0.85rem; color: #6b7280;">Complejidad</div>
+                                <div id="complexity" style="font-size: 1.3rem; font-weight: bold; color: #2563eb;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Skills Section -->
         <div class="section" id="skills">
             <h2>Habilidades Técnicas - Verificables</h2>
@@ -1006,6 +1092,160 @@
     </div>
 
     <script>
+        // ==============================================
+        // NLP DEMO - Análisis de Lenguaje Natural
+        // ==============================================
+
+        // Palabras positivas y negativas para análisis de sentimientos
+        const positiveWords = [
+            'excelente', 'bueno', 'genial', 'increíble', 'maravilloso', 'fantástico', 'perfecto',
+            'feliz', 'contento', 'alegre', 'emocionado', 'entusiasmado', 'encantado', 'satisfecho',
+            'amor', 'éxito', 'logro', 'victoria', 'ganador', 'mejor', 'superior', 'ideal',
+            'positivo', 'excelencia', 'calidad', 'beneficio', 'oportunidad', 'crecimiento'
+        ];
+
+        const negativeWords = [
+            'malo', 'terrible', 'horrible', 'pésimo', 'deficiente', 'pobre', 'mediocre',
+            'triste', 'infeliz', 'deprimido', 'enojado', 'frustrado', 'decepcionado', 'molesto',
+            'odio', 'fracaso', 'pérdida', 'derrota', 'perdedor', 'peor', 'inferior', 'problema',
+            'negativo', 'error', 'fallo', 'defecto', 'crisis', 'dificultad'
+        ];
+
+        // Stop words en español
+        const stopWords = [
+            'el', 'la', 'de', 'que', 'y', 'a', 'en', 'un', 'ser', 'se', 'no', 'haber',
+            'por', 'con', 'su', 'para', 'como', 'estar', 'tener', 'le', 'lo', 'todo',
+            'pero', 'más', 'hacer', 'o', 'poder', 'decir', 'este', 'ir', 'otro', 'ese',
+            'si', 'me', 'ya', 'ver', 'porque', 'dar', 'cuando', 'él', 'muy', 'sin',
+            'vez', 'mucho', 'saber', 'qué', 'sobre', 'mi', 'alguno', 'mismo', 'yo', 'también',
+            'hasta', 'año', 'dos', 'querer', 'entre', 'así', 'primero', 'desde', 'grande'
+        ];
+
+        // Intents para clasificación
+        const intents = {
+            consulta: {
+                keywords: ['pregunta', 'duda', 'consulta', 'información', 'saber', 'conocer', 'cómo', 'qué', 'cuándo', 'dónde', 'por qué', 'cuál'],
+                label: 'Consulta/Pregunta'
+            },
+            entusiasmo: {
+                keywords: ['emocionado', 'entusiasmado', 'feliz', 'contento', 'genial', 'excelente', 'encantado', 'gustaría', 'interesa'],
+                label: 'Entusiasmo/Interés'
+            },
+            solicitud: {
+                keywords: ['necesito', 'requiero', 'solicito', 'pido', 'ayuda', 'favor', 'puede', 'podrían', 'quisiera'],
+                label: 'Solicitud/Petición'
+            },
+            profesional: {
+                keywords: ['trabajo', 'empleo', 'puesto', 'cargo', 'experiencia', 'habilidades', 'competencias', 'cv', 'candidato'],
+                label: 'Contexto Profesional'
+            }
+        };
+
+        function analyzeText() {
+            const text = document.getElementById('nlpInput').value.trim();
+            if (!text) { alert('Por favor ingrese un texto para analizar'); return; }
+
+            const sentiment = analyzeSentiment(text);
+            const intent = classifyIntent(text);
+            const keywords = extractKeywords(text);
+            const stats = getTextStats(text);
+
+            displayNLPResults(sentiment, intent, keywords, stats);
+        }
+
+        function analyzeSentiment(text) {
+            const words = text.toLowerCase().split(/\s+/);
+            let positiveScore = 0, negativeScore = 0;
+
+            words.forEach(word => {
+                const cleanWord = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g, '');
+                if (positiveWords.includes(cleanWord)) positiveScore++;
+                if (negativeWords.includes(cleanWord)) negativeScore++;
+            });
+
+            const totalScore = positiveScore + negativeScore;
+            const polarity = totalScore === 0 ? 0 : (positiveScore - negativeScore) / totalScore;
+
+            let label, emoji, color;
+            if (polarity > 0.2) { label = 'Positivo'; emoji = '😊'; color = '#10b981'; }
+            else if (polarity < -0.2) { label = 'Negativo'; emoji = '😟'; color = '#ef4444'; }
+            else { label = 'Neutral'; emoji = '😐'; color = '#6b7280'; }
+
+            const confidence = Math.min((Math.abs(polarity) + (totalScore / words.length * 2)) * 100, 100);
+
+            return { label: `${emoji} ${label}`, score: `${confidence.toFixed(0)}%`, polarity: polarity.toFixed(2), color: color };
+        }
+
+        function classifyIntent(text) {
+            const textLower = text.toLowerCase();
+            const scores = {};
+
+            Object.keys(intents).forEach(intentKey => {
+                const intent = intents[intentKey];
+                let score = 0;
+                intent.keywords.forEach(keyword => { if (textLower.includes(keyword)) score++; });
+                if (score > 0) scores[intentKey] = { label: intent.label, score: score };
+            });
+
+            const sortedIntents = Object.values(scores).sort((a, b) => b.score - a.score);
+            return sortedIntents.length > 0 ? sortedIntents : [{label: 'General', score: 1}];
+        }
+
+        function extractKeywords(text) {
+            const words = text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()¿?¡!]/g, '').split(/\s+/);
+            const wordFreq = {};
+            words.forEach(word => {
+                if (word.length > 3 && !stopWords.includes(word)) wordFreq[word] = (wordFreq[word] || 0) + 1;
+            });
+
+            return Object.entries(wordFreq).sort((a, b) => b[1] - a[1]).slice(0, 8);
+        }
+
+        function getTextStats(text) {
+            const words = text.split(/\s+/).filter(w => w.length > 0);
+            const chars = text.length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+            const avgWordLength = words.reduce((sum, word) => sum + word.length, 0) / words.length;
+
+            let complexity = avgWordLength < 4 ? 'Baja' : avgWordLength < 6 ? 'Media' : 'Alta';
+
+            return { words: words.length, chars: chars, sentences: sentences, complexity: complexity };
+        }
+
+        function displayNLPResults(sentiment, intent, keywords, stats) {
+            const resultsDiv = document.getElementById('nlpResults');
+            resultsDiv.style.display = 'block';
+
+            document.getElementById('sentimentLabel').textContent = sentiment.label;
+            document.getElementById('sentimentLabel').style.color = sentiment.color;
+            document.getElementById('sentimentScore').textContent = sentiment.score;
+            document.getElementById('sentimentPolarity').textContent = sentiment.polarity;
+
+            const intentHTML = intent.map((int, idx) => {
+                const width = (int.score / intent[0].score) * 100;
+                return `<div style="margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span style="font-weight: 600;">${int.label}</span><span style="color: #6b7280;">Coincidencias: ${int.score}</span></div><div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;"><div style="background: linear-gradient(90deg, #667eea, #764ba2); height: 100%; width: ${width}%; border-radius: 10px; transition: width 0.5s;"></div></div></div>`;
+            }).join('');
+            document.getElementById('intentResults').innerHTML = intentHTML;
+
+            const keywordsHTML = keywords.map(([word, freq]) => {
+                const size = Math.min(0.9 + (freq * 0.2), 1.5);
+                return `<span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 8px 15px; border-radius: 20px; font-size: ${size}rem; font-weight: 500;">${word} <span style="opacity: 0.8; font-size: 0.85em;">(${freq})</span></span>`;
+            }).join('');
+            document.getElementById('keywordsResults').innerHTML = keywordsHTML || '<span style="color: #6b7280;">No se encontraron palabras clave significativas</span>';
+
+            document.getElementById('wordCount').textContent = stats.words;
+            document.getElementById('charCount').textContent = stats.chars;
+            document.getElementById('sentenceCount').textContent = stats.sentences;
+            document.getElementById('complexity').textContent = stats.complexity;
+
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ==============================================
+        // CHATBOT MEJORADO CON CONTEXTO
+        // ==============================================
+        let conversationHistory = [];
+
         // Chatbot Knowledge Base
         const knowledgeBase = {
             chatbot: {
