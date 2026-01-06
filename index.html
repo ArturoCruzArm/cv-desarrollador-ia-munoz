@@ -986,6 +986,57 @@
             </div>
         </div>
 
+        <!-- Voice Bot Section -->
+        <div class="section" id="voiceBot" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); color: white; border-radius: 15px;">
+            <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">🎤 Voice Bot con IA - Asistente por Voz</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 30px; opacity: 0.95;">
+                Hablen conmigo usando su voz. Este voice bot combina reconocimiento de voz, NLP y síntesis de voz en tiempo real.
+            </p>
+
+            <div style="background: white; border-radius: 15px; padding: 30px; color: #333;">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <button id="startVoiceBtn" onclick="startVoiceRecognition()" style="background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); color: white; border: none; padding: 20px 40px; border-radius: 50px; font-size: 1.2rem; font-weight: 600; cursor: pointer; margin: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        🎤 Iniciar Voice Bot
+                    </button>
+                    <button id="stopVoiceBtn" onclick="stopVoiceRecognition()" disabled style="background: #ef4444; color: white; border: none; padding: 20px 40px; border-radius: 50px; font-size: 1.2rem; font-weight: 600; cursor: not-allowed; margin: 10px; opacity: 0.5;">
+                        ⏹️ Detener
+                    </button>
+                </div>
+
+                <div id="voiceStatus" style="text-align: center; margin-bottom: 20px; padding: 15px; background: #f3f4f6; border-radius: 10px;">
+                    <div style="font-size: 1.1rem; font-weight: 600; color: #6b7280;">
+                        Estado: <span id="statusText">Inactivo</span>
+                    </div>
+                    <div id="micAnimation" style="display: none; margin-top: 10px;">
+                        <div style="display: inline-block; width: 60px; height: 60px; border: 4px solid #00d2ff; border-radius: 50%; animation: pulse 1.5s ease-in-out infinite;">
+                            <div style="margin-top: 10px; font-size: 30px;">🎤</div>
+                        </div>
+                        <div style="margin-top: 10px; color: #00d2ff; font-weight: 600;">Escuchando...</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #2563eb; margin-bottom: 10px;">📝 Transcripción:</h3>
+                    <div id="transcription" style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 10px; padding: 20px; min-height: 80px; font-size: 1.1rem;">
+                        <em style="color: #9ca3af;">Su voz aparecerá aquí...</em>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: #2563eb; margin-bottom: 15px;">💬 Historial:</h3>
+                    <div id="voiceHistory" style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 10px; padding: 20px; max-height: 400px; overflow-y: auto;">
+                        <div style="text-align: center; color: #9ca3af; padding: 40px;">🎙️<p>Conversación por voz aparecerá aquí</p></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px;">
+                    <p style="color: #92400e; font-size: 0.9rem; margin: 0;">
+                        <strong>💡 Nota:</strong> Use Chrome/Edge/Safari. Permita acceso al micrófono.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- NLP Demo Section -->
         <div class="section nlp-demo-section" id="nlpDemo" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 15px;">
             <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">Demo de NLP en Vivo - IA en Acción</h2>
@@ -1643,6 +1694,129 @@ Sigue estos pasos:
                 downloadPDF();
             }
         });
+
+        // ==============================================
+        // VOICE BOT
+        // ==============================================
+        let recognition;
+        let synthesis = window.speechSynthesis;
+        let isListening = false;
+
+        function startVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('Su navegador no soporta reconocimiento de voz. Use Chrome, Edge o Safari.');
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'es-ES';
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onstart = function() {
+                isListening = true;
+                document.getElementById('statusText').textContent = 'Escuchando...';
+                document.getElementById('statusText').style.color = '#10b981';
+                document.getElementById('micAnimation').style.display = 'block';
+                document.getElementById('startVoiceBtn').disabled = true;
+                document.getElementById('stopVoiceBtn').disabled = false;
+                document.getElementById('stopVoiceBtn').style.opacity = '1';
+                document.getElementById('stopVoiceBtn').style.cursor = 'pointer';
+            };
+
+            recognition.onresult = function(event) {
+                let final = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        final += event.results[i][0].transcript;
+                    } else {
+                        document.getElementById('transcription').innerHTML = `<span style="color: #6b7280;">${event.results[i][0].transcript}</span>`;
+                    }
+                }
+                if (final) {
+                    document.getElementById('transcription').innerHTML = `<strong>${final}</strong>`;
+                    processVoiceInput(final);
+                }
+            };
+
+            recognition.onerror = function(event) {
+                if (event.error === 'not-allowed') {
+                    alert('Permita acceso al micrófono.');
+                    stopVoiceRecognition();
+                }
+            };
+
+            recognition.onend = function() {
+                if (isListening) recognition.start();
+            };
+
+            recognition.start();
+        }
+
+        function stopVoiceRecognition() {
+            isListening = false;
+            if (recognition) recognition.stop();
+            document.getElementById('statusText').textContent = 'Inactivo';
+            document.getElementById('statusText').style.color = '#6b7280';
+            document.getElementById('micAnimation').style.display = 'none';
+            document.getElementById('startVoiceBtn').disabled = false;
+            document.getElementById('stopVoiceBtn').disabled = true;
+            document.getElementById('stopVoiceBtn').style.opacity = '0.5';
+            document.getElementById('stopVoiceBtn').style.cursor = 'not-allowed';
+        }
+
+        function processVoiceInput(text) {
+            addVoiceMessage(text, 'user');
+            const response = getBotResponse(text);
+            setTimeout(() => {
+                addVoiceMessage(response, 'bot');
+                speakResponse(response);
+            }, 500);
+        }
+
+        function addVoiceMessage(text, sender) {
+            const historyDiv = document.getElementById('voiceHistory');
+            if (historyDiv.querySelector('.text-center')) historyDiv.innerHTML = '';
+
+            const messageDiv = document.createElement('div');
+            messageDiv.style.cssText = `margin-bottom: 15px; padding: 15px; border-radius: 12px; ${sender === 'user' ? 'background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); color: white; margin-left: 20%;' : 'background: #e0e7ff; color: #1f2937; margin-right: 20%;'} animation: slideIn 0.3s ease;`;
+
+            const header = document.createElement('div');
+            header.style.cssText = 'font-weight: 600; font-size: 0.85rem; margin-bottom: 5px; opacity: 0.8;';
+            header.textContent = sender === 'user' ? '🎤 Usted' : '🤖 Voice Bot';
+
+            const content = document.createElement('div');
+            content.innerHTML = text;
+
+            messageDiv.appendChild(header);
+            messageDiv.appendChild(content);
+            historyDiv.appendChild(messageDiv);
+            historyDiv.scrollTop = historyDiv.scrollHeight;
+        }
+
+        function speakResponse(text) {
+            synthesis.cancel();
+            const cleanText = text.replace(/<[^>]*>/g, '').replace(/•/g, '').replace(/\n/g, ' ');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'es-ES';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+
+            utterance.onstart = () => {
+                document.getElementById('statusText').textContent = 'Hablando...';
+                document.getElementById('statusText').style.color = '#3a7bd5';
+            };
+
+            utterance.onend = () => {
+                if (isListening) {
+                    document.getElementById('statusText').textContent = 'Escuchando...';
+                    document.getElementById('statusText').style.color = '#10b981';
+                }
+            };
+
+            synthesis.speak(utterance);
+        }
     </script>
 </body>
 </html>
