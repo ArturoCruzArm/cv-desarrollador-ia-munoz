@@ -601,6 +601,127 @@
                 transform: translateY(-10px);
             }
         }
+
+        /* Estilos para impresión PDF */
+        @media print {
+            @page {
+                size: A4;
+                margin: 1.5cm;
+            }
+
+            body {
+                background: white !important;
+                font-size: 11pt;
+                line-height: 1.4;
+            }
+
+            /* Ocultar elementos interactivos */
+            .chatbot-section,
+            .cta-banner,
+            .demo-button,
+            .btn,
+            button,
+            .quick-questions,
+            .chat-input-container,
+            .social-links,
+            .footer,
+            #nlpResults {
+                display: none !important;
+            }
+
+            /* Optimizar hero section */
+            .hero {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 30px 20px !important;
+                page-break-after: avoid;
+            }
+
+            .company-tag {
+                background: rgba(255,255,255,0.2) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Optimizar secciones */
+            .section {
+                page-break-inside: avoid;
+                margin: 20px 0;
+                padding: 20px !important;
+                box-shadow: none !important;
+            }
+
+            .requirement-card,
+            .timeline-item,
+            .skill-item {
+                page-break-inside: avoid;
+                margin-bottom: 15px;
+            }
+
+            /* Colores para impresión */
+            .section h2 {
+                color: #2563eb !important;
+                border-bottom: 2px solid #2563eb !important;
+            }
+
+            .requirement-card {
+                border-left: 3px solid #2563eb !important;
+            }
+
+            .check-icon {
+                background: #10b981 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Skill bars */
+            .skill-progress {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Timeline */
+            .timeline::before {
+                background: #2563eb !important;
+            }
+
+            .timeline-dot {
+                background: #10b981 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Asegurar que todo el contenido sea visible */
+            .container {
+                max-width: 100% !important;
+            }
+
+            /* Ajustar grids para impresión */
+            .requirements-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .skills-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            /* Enlaces visibles */
+            a[href]:after {
+                content: none !important;
+            }
+
+            /* Información de contacto destacada */
+            .contact-info {
+                border: 2px solid #2563eb;
+                padding: 15px;
+                border-radius: 10px;
+                background: white !important;
+                margin-top: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -632,6 +753,13 @@
                     <span>💼</span>
                     <a href="https://www.linkedin.com/in/juanarturocruzarmenta/" target="_blank">LinkedIn</a>
                 </div>
+            </div>
+
+            <!-- Botón de descarga PDF -->
+            <div style="margin-top: 30px;">
+                <button onclick="downloadPDF()" style="background: white; color: #667eea; border: none; padding: 15px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)'">
+                    📄 Descargar CV en PDF
+                </button>
             </div>
         </div>
     </div>
@@ -1403,6 +1531,42 @@
         document.addEventListener('click', function() {
             interactionCount++;
             console.log('User interactions:', interactionCount);
+        });
+
+        // ==============================================
+        // DESCARGA DE PDF
+        // ==============================================
+        function downloadPDF() {
+            const instructions = `
+📄 GENERAR CV EN PDF
+
+Sigue estos pasos:
+
+1. Selecciona "Guardar como PDF" como destino
+2. Activa "Gráficos de fondo" para mantener colores
+3. Usa el nombre: CV_JuanArturo_DesarrolladorIA_MunozAsociados.pdf
+4. Haz clic en "Guardar"
+
+¡El PDF se guardará en tu carpeta de Descargas!
+            `.trim();
+
+            if (confirm(instructions)) {
+                const originalTitle = document.title;
+                document.title = 'CV_JuanArturo_DesarrolladorIA_MunozAsociados';
+
+                setTimeout(() => {
+                    window.print();
+                    setTimeout(() => { document.title = originalTitle; }, 500);
+                }, 100);
+            }
+        }
+
+        // Permitir descarga con Ctrl+P
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                downloadPDF();
+            }
         });
     </script>
 </body>
