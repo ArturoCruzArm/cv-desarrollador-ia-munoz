@@ -1037,6 +1037,196 @@
             </div>
         </div>
 
+
+        <!-- Voice Bot Telefónico Twilio -->
+        <div class="section" id="voiceBotPhone" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px;">
+            <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">📞 Voice Bot Telefónico - Twilio Integration</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 30px; opacity: 0.95;">
+                Voice bot profesional para llamadas telefónicas a números locales. Integración con Twilio Voice API, NLP y sistemas de Contact Center.
+            </p>
+
+            <div style="background: white; border-radius: 15px; padding: 30px; color: #333;">
+
+                <!-- Arquitectura Visual -->
+                <div style="background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                    <h3 style="color: #2563eb; margin-bottom: 20px; text-align: center;">🏗️ Arquitectura del Sistema</h3>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-size: 2.5rem; margin-bottom: 8px;">📱</div>
+                            <h4 style="color: #667eea; margin-bottom: 8px; font-size: 1rem;">Llamada Entrante</h4>
+                            <p style="font-size: 0.85rem; color: #6b7280;">Cliente llama a número local</p>
+                        </div>
+
+                        <div style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #667eea;">→</div>
+
+                        <div style="background: white; border: 2px solid #10b981; border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-size: 2.5rem; margin-bottom: 8px;">☁️</div>
+                            <h4 style="color: #10b981; margin-bottom: 8px; font-size: 1rem;">Twilio Voice API</h4>
+                            <p style="font-size: 0.85rem; color: #6b7280;">Webhook al servidor</p>
+                        </div>
+
+                        <div style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #667eea;">→</div>
+
+                        <div style="background: white; border: 2px solid #f59e0b; border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-size: 2.5rem; margin-bottom: 8px;">🧠</div>
+                            <h4 style="color: #f59e0b; margin-bottom: 8px; font-size: 1rem;">Voice Bot IA</h4>
+                            <p style="font-size: 0.85rem; color: #6b7280;">Procesa con NLP</p>
+                        </div>
+
+                        <div style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #667eea;">→</div>
+
+                        <div style="background: white; border: 2px solid #8b5cf6; border-radius: 8px; padding: 15px; text-align: center;">
+                            <div style="font-size: 2.5rem; margin-bottom: 8px;">🔊</div>
+                            <h4 style="color: #8b5cf6; margin-bottom: 8px; font-size: 1rem;">Text-to-Speech</h4>
+                            <p style="font-size: 0.85rem; color: #6b7280;">Amazon Polly (español)</p>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px; border-radius: 8px; text-align: center; font-size: 0.9rem;">
+                        <strong>🔄 Flujo:</strong> Llamada → Twilio → NLP → Respuesta IA → TTS → Cliente
+                    </div>
+                </div>
+
+                <!-- Características Técnicas -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: #2563eb; margin-bottom: 15px;">⚙️ Características Técnicas</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <h4 style="color: #667eea; margin-bottom: 8px;">📞 Twilio Voice API</h4>
+                            <ul style="margin-left: 20px; font-size: 0.9rem; color: #4b5563;">
+                                <li>Números locales de México</li>
+                                <li>Llamadas entrantes/salientes</li>
+                                <li>TwiML para flujo</li>
+                                <li>Webhooks integración</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981;">
+                            <h4 style="color: #10b981; margin-bottom: 8px;">🎤 Speech Recognition</h4>
+                            <ul style="margin-left: 20px; font-size: 0.9rem; color: #4b5563;">
+                                <li>Voz en español (es-MX)</li>
+                                <li>Optimizado para llamadas</li>
+                                <li>Enhanced accuracy</li>
+                                <li>Timeout inteligente</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <h4 style="color: #f59e0b; margin-bottom: 8px;">🧠 NLP & IA</h4>
+                            <ul style="margin-left: 20px; font-size: 0.9rem; color: #4b5563;">
+                                <li>Base de 10+ tópicos</li>
+                                <li>Keyword matching</li>
+                                <li>Intent recognition</li>
+                                <li>Respuestas contextuales</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; border-left: 4px solid #8b5cf6;">
+                            <h4 style="color: #8b5cf6; margin-bottom: 8px;">🔊 Text-to-Speech</h4>
+                            <ul style="margin-left: 20px; font-size: 0.9rem; color: #4b5563;">
+                                <li>Amazon Polly voz Mia</li>
+                                <li>Calidad profesional</li>
+                                <li>Entonación natural</li>
+                                <li>Tiempo real</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Beneficios Contact Center -->
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                    <h3 style="color: white; margin-bottom: 15px; text-align: center;">💼 Beneficios para Contact Center</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; backdrop-filter: blur(10px);">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">⏰</div>
+                            <strong>24/7</strong>
+                            <p style="font-size: 0.85rem; margin-top: 5px; opacity: 0.95;">Atención continua</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; backdrop-filter: blur(10px);">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">💰</div>
+                            <strong>-70% Costos</strong>
+                            <p style="font-size: 0.85rem; margin-top: 5px; opacity: 0.95;">Reducción por llamada</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; backdrop-filter: blur(10px);">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">📊</div>
+                            <strong>Escalabilidad</strong>
+                            <p style="font-size: 0.85rem; margin-top: 5px; opacity: 0.95;">Miles simultáneas</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; backdrop-filter: blur(10px);">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">✅</div>
+                            <strong>Consistencia</strong>
+                            <p style="font-size: 0.85rem; margin-top: 5px; opacity: 0.95;">Respuestas precisas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deployment -->
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="color: #92400e; margin-bottom: 15px;">🚀 Deployment Twilio (5 min)</h3>
+                    <ol style="color: #92400e; margin-left: 20px; line-height: 1.8; font-size: 0.9rem;">
+                        <li><strong>Cuenta:</strong> twilio.com/try-twilio (trial $15 USD gratis)</li>
+                        <li><strong>Número:</strong> Comprar número local León, Gto</li>
+                        <li><strong>Function:</strong> Copiar código de twilio-voice-bot.js</li>
+                        <li><strong>Webhook:</strong> Configurar en número telefónico</li>
+                        <li><strong>Test:</strong> Llamar y hablar con el bot</li>
+                    </ol>
+                    <p style="margin-top: 15px; color: #92400e; font-size: 0.9rem;">
+                        <strong>💡 Código completo:</strong> Archivo twilio-voice-bot.js en este proyecto
+                    </p>
+                </div>
+
+                <!-- Código Ejemplo -->
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #2563eb; margin-bottom: 10px;">💻 Código Twilio Function</h3>
+                    <pre style="background: #1f2937; color: #e5e7eb; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; line-height: 1.4;"><code>exports.handler = function(context, event, callback) {
+  const twiml = new Twilio.twiml.VoiceResponse();
+
+  if (!event.SpeechResult) {
+    const gather = twiml.gather({
+      input: 'speech', language: 'es-MX'
+    });
+    gather.say(
+      { voice: 'Polly.Mia', language: 'es-MX' },
+      'Hola, soy el asistente de Juan Arturo. ' +
+      '¿En qué puedo ayudarte?'
+    );
+  } else {
+    const response = getBotResponse(event.SpeechResult);
+    twiml.say({ voice: 'Polly.Mia' }, response);
+  }
+  callback(null, twiml);
+};</code></pre>
+                </div>
+
+                <!-- Casos de Uso -->
+                <div>
+                    <h3 style="color: #2563eb; margin-bottom: 15px;">🎯 Casos de Uso Contact Center</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 8px; border: 2px solid #e5e7eb;">
+                            <strong style="color: #667eea; font-size: 0.95rem;">📋 Primera Línea</strong>
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 8px;">FAQs, direccionamiento, captura info</p>
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 8px; border: 2px solid #e5e7eb;">
+                            <strong style="color: #10b981; font-size: 0.95rem;">🕐 Fuera Horario</strong>
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 8px;">Servicio cuando agentes offline</p>
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 8px; border: 2px solid #e5e7eb;">
+                            <strong style="color: #f59e0b; font-size: 0.95rem;">📞 IVR Inteligente</strong>
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 8px;">NLP sin presionar teclas</p>
+                        </div>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 8px; border: 2px solid #e5e7eb;">
+                            <strong style="color: #8b5cf6; font-size: 0.95rem;">📊 Encuestas</strong>
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 8px;">Feedback automatizado</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <!-- NLP Demo Section -->
         <div class="section nlp-demo-section" id="nlpDemo" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 15px;">
             <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">Demo de NLP en Vivo - IA en Acción</h2>
