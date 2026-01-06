@@ -602,6 +602,11 @@
             }
         }
 
+        /* Mensaje visible solo en PDF (oculto en web) */
+        .pdf-only-message {
+            display: none;
+        }
+
         /* Estilos para impresión PDF */
         @media print {
             @page {
@@ -617,6 +622,8 @@
 
             /* Ocultar elementos interactivos */
             .chatbot-section,
+            .nlp-demo-section,
+            #nlpDemo,
             .cta-banner,
             .demo-button,
             .btn,
@@ -627,6 +634,38 @@
             .footer,
             #nlpResults {
                 display: none !important;
+            }
+
+            /* Mostrar mensaje para visitar sitio (solo PDF) */
+            .pdf-only-message {
+                display: block !important;
+                background: #f3f4f6;
+                border: 3px solid #2563eb;
+                padding: 25px;
+                margin: 30px 0;
+                border-radius: 12px;
+                text-align: center;
+                page-break-inside: avoid;
+            }
+
+            .pdf-only-message h3 {
+                color: #2563eb !important;
+                font-size: 18pt;
+                margin-bottom: 15px;
+            }
+
+            .pdf-only-message p {
+                color: #1f2937 !important;
+                font-size: 12pt;
+                margin: 10px 0;
+            }
+
+            .pdf-only-message .website-url {
+                color: #2563eb !important;
+                font-size: 14pt;
+                font-weight: bold;
+                margin: 15px 0;
+                display: block;
             }
 
             /* Optimizar hero section */
@@ -944,7 +983,7 @@
         </div>
 
         <!-- NLP Demo Section -->
-        <div class="section" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 15px;">
+        <div class="section nlp-demo-section" id="nlpDemo" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 15px;">
             <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">Demo de NLP en Vivo - IA en Acción</h2>
             <p style="text-align: center; font-size: 1.1rem; margin-bottom: 30px; opacity: 0.95;">
                 Prueben mi implementación de Procesamiento de Lenguaje Natural. Escriban cualquier texto y vean el análisis en tiempo real.
@@ -1214,6 +1253,21 @@
                     Llamar: 477 920 3776
                 </a>
             </div>
+        </div>
+
+        <!-- Mensaje visible solo en PDF -->
+        <div class="pdf-only-message">
+            <h3>🌐 Ver CV Interactivo en Línea</h3>
+            <p>Este PDF contiene la información estática de mi CV.</p>
+            <p><strong>Para una experiencia completa e interactiva, visite:</strong></p>
+            <div class="website-url">desarrollador-ia.invitados.org</div>
+            <p style="margin-top: 20px;">En el sitio web podrá:</p>
+            <p>
+                ✓ Probar el <strong>Chatbot funcional</strong> con IA<br>
+                ✓ Ver la <strong>Demo de NLP en vivo</strong> (análisis de sentimientos)<br>
+                ✓ Interactuar con todas las secciones dinámicas<br>
+                ✓ Verificar mis capacidades técnicas en tiempo real
+            </p>
         </div>
     </div>
 
