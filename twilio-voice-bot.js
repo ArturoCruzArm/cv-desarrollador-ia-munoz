@@ -104,91 +104,58 @@ exports.handler = function(context, event, callback) {
   }
 
   // Manejo del flujo de la llamada
-  if (callStatus === 'ringing' || callStatus === 'in-progress') {
+  if (!speechResult) {
+    // --- Primera Interacción: Bienvenida ---
+    const gather = twiml.gather({
+      input: 'speech',
+      language: 'es-MX',
+      speechTimeout: 'auto',
+      speechModel: 'phone_call',
+      enhanced: true,
+      action: '/voice-bot', // Llama a esta misma función con el resultado
+      method: 'POST'
+    });
 
-    if (!speechResult) {
-      // Primera interacción: mensaje de bienvenida
-      const gather = twiml.gather({
-        input: 'speech',
-        language: 'es-MX',
-        speechTimeout: 'auto',
-        speechModel: 'phone_call',
-        enhanced: true,
-        action: '/voice-bot-ia', // URL de este mismo Function
-        method: 'POST'
-      });
-
-      gather.say(
-        {
-          voice: 'Polly.Mia', // Voz en español de Amazon Polly
-          language: 'es-MX'
-        },
-        'Hola, bienvenido al voice bot de Juan Arturo Cruz Armenta, candidato para Desarrollador de Inteligencia Artificial en MUÑOZ C Y ASOCIADOS. ' +
-        'Este es un asistente con inteligencia artificial que puede responder preguntas sobre la experiencia, habilidades, y proyectos de Juan. ' +
-        'Por favor, haz tu pregunta ahora.'
-      );
-
-      // Si no hay respuesta, dar opción de menú
-      twiml.say(
-        {
-          voice: 'Polly.Mia',
-          language: 'es-MX'
-        },
-        'No recibí tu pregunta. Puedo hablarte sobre experiencia laboral, habilidades técnicas, educación, o proyectos con chatbots. Llama de nuevo cuando estés listo.'
-      );
-
-    } else {
-      // Procesar la respuesta del usuario con IA/NLP
-      const botResponse = getBotResponse(speechResult);
-
-      // Responder con la información
-      twiml.say(
-        {
-          voice: 'Polly.Mia',
-          language: 'es-MX'
-        },
-        botResponse
-      );
-
-      // Preguntar si necesita más información
-      const gather = twiml.gather({
-        input: 'speech',
-        language: 'es-MX',
-        speechTimeout: 'auto',
-        speechModel: 'phone_call',
-        enhanced: true,
-        action: '/voice-bot-ia',
-        method: 'POST',
-        timeout: 5
-      });
-
-      gather.say(
-        {
-          voice: 'Polly.Mia',
-          language: 'es-MX'
-        },
-        '¿Tienes otra pregunta? Puedo ayudarte con más información.'
-      );
-
-      // Si no hay más preguntas, despedirse
-      twiml.say(
-        {
-          voice: 'Polly.Mia',
-          language: 'es-MX'
-        },
-        'Gracias por llamar. Para más información, visita desarrollador-ia.invitados.org. Hasta luego.'
-      );
-    }
-
-  } else {
-    // Llamada finalizada
-    twiml.say(
-      {
+    gather.say({
         voice: 'Polly.Mia',
         language: 'es-MX'
       },
-      'Hasta luego.'
+      'Hola, bienvenido al voice bot de Juan Arturo Cruz Armenta, candidato para Desarrollador de Inteligencia Artificial en MUÑOZ C Y ASOCIADOS. ' +
+      'Este es un asistente con inteligencia artificial que puede responder preguntas sobre la experiencia, habilidades, y proyectos de Juan. ' +
+      'Por favor, haz tu pregunta ahora.'
     );
+
+    // Si el usuario no dice nada, la llamada continúa aquí después del timeout del gather.
+    twiml.say('No recibí tu pregunta. Gracias por llamar. Hasta luego.');
+    twiml.hangup();
+
+  } else {
+    // --- Interacciones Siguientes: Responder y continuar ---
+    // Primero, damos la respuesta a la pregunta anterior.
+    const botResponse = getBotResponse(speechResult);
+    twiml.say({
+      voice: 'Polly.Mia',
+      language: 'es-MX'
+    }, botResponse);
+
+    // Ahora, creamos un nuevo gather para esperar la siguiente pregunta.
+    const gather = twiml.gather({
+      input: 'speech',
+      language: 'es-MX',
+      speechTimeout: '4', // Un timeout más corto para continuar la conversación.
+      speechModel: 'phone_call',
+      enhanced: true,
+      action: '/voice-bot', // Vuelve a llamar a la función para un bucle.
+      method: 'POST'
+    });
+
+    gather.say({
+      voice: 'Polly.Mia',
+      language: 'es-MX'
+    }, '¿Tienes alguna otra pregunta?');
+
+    // Si el usuario no hace otra pregunta, nos despedimos.
+    twiml.say('Gracias por tu tiempo. ¡Hasta luego!');
     twiml.hangup();
   }
 
