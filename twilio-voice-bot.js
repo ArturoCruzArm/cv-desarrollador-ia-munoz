@@ -1,10 +1,9 @@
 /**
- * VOICE BOT TELEFÓNICO CON TWILIO + IA
+ * VOICE BOT TELEFÓNICO CON TWILIO + GEMINI AI
  * Desarrollador: Juan Arturo Cruz Armenta
  * Para: MUÑOZ C Y ASOCIADOS
  *
- * Este Twilio Function maneja llamadas telefónicas entrantes
- * con procesamiento de lenguaje natural e inteligencia artificial.
+ * Voice bot con IA real usando Google Gemini API
  *
  * DEPLOYMENT:
  * 1. Ir a Twilio Console > Functions & Assets > Services
@@ -14,7 +13,10 @@
  * 5. Configurar el webhook en el número telefónico
  */
 
-exports.handler = function(context, event, callback) {
+const GEMINI_API_KEY = 'AIzaSyDChkd9s_ZrZWrNViv0PMbKkAhaur1BOnQ';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+
+exports.handler = async function(context, event, callback) {
   const twiml = new Twilio.twiml.VoiceResponse();
 
   // Obtener parámetros de la llamada
@@ -70,37 +72,56 @@ exports.handler = function(context, event, callback) {
     }
   };
 
-  // Función para encontrar la mejor respuesta usando NLP
-  function getBotResponse(userInput) {
+  // Función para obtener respuesta de Gemini AI
+  async function getBotResponse(userInput) {
     if (!userInput) {
       return 'No te escuché bien. Por favor repite tu pregunta.';
     }
 
-    const input = userInput.toLowerCase();
-    let bestMatch = null;
-    let maxScore = 0;
+    try {
+      const systemPrompt = `Eres el asistente virtual de voz de Juan Arturo Cruz Armenta, candidato para Desarrollador IA en MUÑOZ C Y ASOCIADOS en León, Guanajuato.
 
-    // Buscar coincidencias en la base de conocimientos
-    for (const [topic, data] of Object.entries(knowledgeBase)) {
-      let score = 0;
-      data.keywords.forEach(keyword => {
-        if (input.includes(keyword)) {
-          score += keyword.length; // Keywords más largos = mejor match
-        }
-      });
+INFORMACIÓN:
+- Experiencia: 5 años (4 años en Contact Center Kodiak Hub, 1 año Full Stack)
+- Chatbots: 3+ años con Dialogflow, NLP, IA conversacional
+- Educación: Ingeniero en Sistemas con especialidad IA (UVEG 2024-2025)
+- Skills: Python, JavaScript, Java, ML, NLP, AWS, Google Cloud
+- Teléfono: 477 920 3776
+- Email: juanarturocruzarmenta@outlook.com
+- Disponibilidad: Inmediata
 
-      if (score > maxScore) {
-        maxScore = score;
-        bestMatch = data.response;
+INSTRUCCIONES:
+- Responde en español de forma BREVE (máximo 2 oraciones)
+- Profesional pero amigable
+- Enfoca en cómo Juan cumple requisitos
+- Si no sabes, indica contactar directamente`;
+
+      const axios = require('axios');
+      const response = await axios.post(
+        `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
+        {
+          contents: [{
+            parts: [{ text: `${systemPrompt}\n\nPregunta: ${userInput}` }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 150
+          }
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      if (response.data.candidates && response.data.candidates[0]) {
+        return response.data.candidates[0].content.parts[0].text;
+      } else {
+        throw new Error('No response from Gemini');
       }
-    }
 
-    // Si no hay match, respuesta genérica
-    if (!bestMatch) {
-      return 'Interesante pregunta. Puedo hablarte sobre la experiencia de Juan, sus habilidades técnicas, educación, proyectos con chatbots, IA, o su experiencia en contact center. ¿Sobre qué te gustaría saber?';
+    } catch (error) {
+      console.error('Error con Gemini:', error);
+      // Fallback
+      return 'Juan tiene 5 años de experiencia, 3 años con chatbots, especialidad en IA, y dominio de Python y JavaScript. ¿Qué aspecto te interesa más?';
     }
-
-    return bestMatch;
   }
 
   // Manejo del flujo de la llamada
@@ -130,33 +151,43 @@ exports.handler = function(context, event, callback) {
     twiml.hangup();
 
   } else {
-    // --- Interacciones Siguientes: Responder y continuar ---
-    // Primero, damos la respuesta a la pregunta anterior.
-    const botResponse = getBotResponse(speechResult);
-    twiml.say({
-      voice: 'Polly.Mia',
-      language: 'es-MX'
-    }, botResponse);
+    // --- Interacciones Siguientes: Responder con Gemini AI ---
+    try {
+      // Primero, damos la respuesta usando Gemini AI
+      const botResponse = await getBotResponse(speechResult);
+      twiml.say({
+        voice: 'Polly.Mia',
+        language: 'es-MX'
+      }, botResponse);
 
-    // Ahora, creamos un nuevo gather para esperar la siguiente pregunta.
-    const gather = twiml.gather({
-      input: 'speech',
-      language: 'es-MX',
-      speechTimeout: '4', // Un timeout más corto para continuar la conversación.
-      speechModel: 'phone_call',
-      enhanced: true,
-      action: '/voice-bot', // Vuelve a llamar a la función para un bucle.
-      method: 'POST'
-    });
+      // Ahora, creamos un nuevo gather para esperar la siguiente pregunta.
+      const gather = twiml.gather({
+        input: 'speech',
+        language: 'es-MX',
+        speechTimeout: '4',
+        speechModel: 'phone_call',
+        enhanced: true,
+        action: '/voice-bot',
+        method: 'POST'
+      });
 
-    gather.say({
-      voice: 'Polly.Mia',
-      language: 'es-MX'
-    }, '¿Tienes alguna otra pregunta?');
+      gather.say({
+        voice: 'Polly.Mia',
+        language: 'es-MX'
+      }, '¿Tienes alguna otra pregunta?');
 
-    // Si el usuario no hace otra pregunta, nos despedimos.
-    twiml.say('Gracias por tu tiempo. ¡Hasta luego!');
-    twiml.hangup();
+      // Si el usuario no hace otra pregunta, nos despedimos.
+      twiml.say('Gracias por tu tiempo. ¡Hasta luego!');
+      twiml.hangup();
+
+    } catch (error) {
+      console.error('Error en voice bot:', error);
+      twiml.say({
+        voice: 'Polly.Mia',
+        language: 'es-MX'
+      }, 'Disculpa, tuve un problema al procesar tu pregunta. Por favor intenta de nuevo o contacta directamente a Juan al 477 920 3776.');
+      twiml.hangup();
+    }
   }
 
   // Retornar la respuesta TwiML

@@ -1559,32 +1559,68 @@
             }
         };
 
-        // Simple NLP - Keywords matching and intent recognition
-        function getBotResponse(userMessage) {
-            const messageLower = userMessage.toLowerCase();
+        // Gemini AI Integration - Respuestas inteligentes con IA real
+        const GEMINI_API_KEY = 'AIzaSyDChkd9s_ZrZWrNViv0PMbKkAhaur1BOnQ';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-            // Search for matching keywords in knowledge base
-            for (let topic in knowledgeBase) {
-                const topicData = knowledgeBase[topic];
-                for (let keyword of topicData.keywords) {
-                    if (messageLower.includes(keyword)) {
-                        return topicData.response;
-                    }
+        async function getBotResponse(userMessage) {
+            try {
+                const systemPrompt = `Eres el asistente virtual de Juan Arturo Cruz Armenta, candidato para el puesto de Desarrollador IA en MUÑOZ C Y ASOCIADOS en León, Guanajuato.
+
+INFORMACIÓN DEL CANDIDATO:
+- Nombre: Juan Arturo Cruz Armenta
+- Ubicación: León, Guanajuato, México
+- Puesto deseado: Desarrollador IA en MUÑOZ C Y ASOCIADOS
+- Experiencia: 5 años total (4 años en Kodiak Hub como Analista de Soporte Técnico, 1 año como Desarrollador Full Stack)
+- Experiencia con chatbots: 3+ años trabajando con chatbots, Dialogflow, NLP
+- Educación: Ingeniero en Sistemas Computacionales con especialidad en Inteligencia Artificial (UVEG 2024-2025)
+- Habilidades: HTML, CSS, JavaScript, Python, Java, Ruby, IA, ML, NLP, AWS, Google Cloud, Dialogflow, Rasa
+- Experiencia Contact Center: 4 años en Kodiak Hub
+- Telefonía: Twilio, Asterisk, FreePBX, VoIP
+- Email: juanarturocruzarmenta@outlook.com
+- Teléfono: 477 920 3776
+- Disponibilidad: Inmediata
+
+INSTRUCCIONES:
+- Responde EN ESPAÑOL de forma profesional pero amigable
+- Máximo 3-4 oraciones por respuesta
+- Enfócate en cómo Juan cumple los requisitos del puesto
+- Si no sabes algo, redirige a contactar directamente a Juan
+- Termina con una pregunta para mantener la conversación`;
+
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `${systemPrompt}\n\nPregunta del reclutador: ${userMessage}`
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 500
+                        }
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.candidates && data.candidates[0]) {
+                    return data.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error('No response from Gemini');
                 }
+
+            } catch (error) {
+                console.error('Error con Gemini API:', error);
+                // Fallback response
+                return 'Disculpa, tuve un problema al procesar tu pregunta. Juan tiene 5 años de experiencia, 3+ años con chatbots, dominio de Python/JavaScript, y especialidad en IA. ¿Sobre qué aspecto específico te gustaría saber más?';
             }
-
-            // Default responses for unmatched queries
-            const defaultResponses = [
-                'Esa es una excelente pregunta. Basándome en mi experiencia de 5 años en desarrollo y 4+ años trabajando con tecnologías conversacionales, puedo decirles que estoy completamente preparado para el rol de Desarrollador IA en MUÑOZ C Y ASOCIADOS. ¿Les gustaría saber sobre algún aspecto específico de mi experiencia?',
-                'Interesante pregunta. ¿Podrían ser más específicos? Puedo hablarles sobre mi experiencia con chatbots, lenguajes de programación, IA/ML, cloud computing, o mi formación académica.',
-                'No estoy seguro de entender completamente su pregunta, pero puedo decirles que cumplo con todos los requisitos del puesto: 3+ años con chatbots, dominio de Python/JavaScript/Java, experiencia con IA/NLP, y conocimientos de cloud. ¿Qué aspecto específico les interesa?'
-            ];
-
-            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
         }
 
-        // Chat functionality
-        function sendMessage() {
+        // Chat functionality with Gemini AI
+        async function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
 
@@ -1599,12 +1635,15 @@
             typingIndicator.style.display = 'block';
             scrollToBottom();
 
-            // Simulate processing time and get response
-            setTimeout(() => {
+            // Get AI response from Gemini
+            try {
+                const response = await getBotResponse(message);
                 typingIndicator.style.display = 'none';
-                const response = getBotResponse(message);
                 addMessage(response, 'bot');
-            }, 1000 + Math.random() * 1000); // Random delay 1-2 seconds
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                addMessage('Disculpa, hubo un error al procesar tu mensaje. Por favor intenta de nuevo.', 'bot');
+            }
         }
 
         function addMessage(text, sender) {
